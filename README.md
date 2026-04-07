@@ -7,8 +7,8 @@ Herramienta CLI para cifrar y descifrar archivos de texto plano usando la librer
 ## Estructura del proyecto
 
 ```
-crypto_tool/
-├── crypto_tool.py       # Programa principal
+cryptoSC/
+├── cryptoSC.py       # Programa principal
 ├── requirements.txt     # Dependencias
 ├── mensaje_prueba.txt   # Archivo de texto de prueba
 ├── README.md            # Este archivo
@@ -21,8 +21,8 @@ crypto_tool/
 
 ```bash
 # 1. Clonar el repositorio
-git clone https://github.com/tu-usuario/crypto_tool.git
-cd crypto_tool
+git clone https://github.com/sebastianmct/CryptoSC-BlockChain.git
+cd cryptoSC
 
 # 3. Instalar dependencias
 pip install -r requirements.txt
@@ -94,7 +94,7 @@ El archivo cifrado no guarda solo el ciphertext, sino tres partes concatenadas:
 
 ## Flujo del sistema
 
-![Diagrama de flujo AES](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/sebastianmct/CryptoSC-BlockChain/main/diagrama.puml)
+![Diagrama de flujo AES](capturas/FlujoDeCryptoSC.png)
 
 ## Bibliografía
 
