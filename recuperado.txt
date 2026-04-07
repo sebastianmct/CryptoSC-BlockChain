@@ -1,0 +1,10 @@
+Hola, este es un mensaje de prueba para el sistema de cifrado AES-256-GCM.
+
+Autor: Evaluación Criptografía con Python
+Fecha: 2026
+Contenido: Texto plano de ejemplo para demostrar el cifrado simétrico.
+
+"La criptografía es la práctica y el estudio de técnicas para
+comunicación segura en presencia de terceros adversarios."
+
+Este archivo tiene menos de 1 KB, cumpliendo el requisito RF-01.
