@@ -1,0 +1,75 @@
+@startuml
+skinparam backgroundColor #FAFAFA
+skinparam defaultFontName Monospaced
+skinparam ArrowColor #333333
+skinparam sequence {
+  ActorBorderColor #444444
+  ParticipantBorderColor #444444
+  ParticipantBackgroundColor #EEF2FF
+  BoxBackgroundColor #F0FFF4
+  DividerBackgroundColor #FFF9C4
+}
+
+title Flujo de Cifrado y Descifrado — cryptoSC.py (AES-256-GCM)
+
+actor       "Usuario"        as U
+participant "cryptoSC.py"   as PY
+participant "AES-256-GCM\n(PyCryptodome)" as AES
+database    "Sistema\nde archivos" as FS
+
+== FASE 1: Generación de Llave (generar-llave) ==
+
+U -> PY   : python cryptoSC.py generar-llave\n--salida llave.key
+PY -> AES : get_random_bytes(32)
+AES --> PY : llave [32 bytes aleatorios]
+PY -> FS  : Escribe llave.key
+PY --> U  : [OK] Llave generada (AES-256)
+
+== FASE 2: Cifrado (cifrar) ==
+
+U -> PY : python cryptoSC.py cifrar\n--texto mensaje_prueba.txt\n--llave llave.key --salida mensaje.enc
+PY -> FS  : Lee mensaje_prueba.txt → plaintext
+PY -> FS  : Lee llave.key → key (32 bytes)
+
+PY -> AES : AES.new(key, MODE_GCM)
+note right of AES
+  GCM genera un **nonce**
+  aleatorio automáticamente
+  (16 bytes únicos por sesión)
+end note
+
+AES --> PY : cipher object + nonce
+PY -> AES : cipher.encrypt_and_digest(plaintext)
+AES --> PY : ciphertext + tag (16 bytes)
+
+note right of PY
+  Archivo .enc contiene:
+  [ nonce: 16 bytes ]
+  [ tag:   16 bytes ]
+  [ ciphertext: N bytes ]
+end note
+
+PY -> FS  : Escribe mensaje.enc\n(nonce + tag + ciphertext)
+PY --> U  : [OK] Archivo cifrado exitosamente
+
+== FASE 3: Descifrado (descifrar) ==
+
+U -> PY : python cryptoSC.py descifrar\n--cifrado mensaje.enc\n--llave llave.key --salida recuperado.txt
+PY -> FS  : Lee llave.key → key
+PY -> FS  : Lee mensaje.enc
+
+PY -> PY  : Separa: nonce (16) | tag (16) | ciphertext (N)
+
+PY -> AES : AES.new(key, MODE_GCM, nonce=nonce)
+PY -> AES : cipher.decrypt_and_verify(ciphertext, tag)
+
+alt Tag válido → integridad confirmada
+  AES --> PY : plaintext original
+  PY -> FS  : Escribe recuperado.txt
+  PY --> U  : [OK] Descifrado exitoso\n+ muestra contenido en pantalla
+else Tag inválido → archivo alterado o llave incorrecta
+  AES --> PY : ValueError
+  PY --> U  : [ERROR] Verificación fallida
+end
+
+@enduml
