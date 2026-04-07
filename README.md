@@ -94,7 +94,7 @@ El archivo cifrado no guarda solo el ciphertext, sino tres partes concatenadas:
 
 ## Flujo del sistema
 
-![Diagrama de flujo AES](capturas/FlujoDeCryptoSC.png)
+![Diagrama de flujo AES](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/sebastianmct/CryptoSC-BlockChain/main/diagrama.puml)
 
 ## Bibliografía
 
